@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:provider_test/data.dart';
 
 class MyTextField extends StatefulWidget {
   const MyTextField(
@@ -22,7 +24,7 @@ class _MyTextFieldState extends State<MyTextField> {
     print('$MyTextField was rebuilt');
 
     //TODO: get [doubleValue] from state management solution (sms).
-    double doubleValue = 0;
+    double doubleValue = Provider.of<Data>(context).doubleValue;
     doubleValue *= widget.ratio;
 
     if (!focus.hasFocus) controller.clear();
@@ -37,7 +39,7 @@ class _MyTextFieldState extends State<MyTextField> {
       onChanged: (value) {
         try {
           final newDouble = double.parse(value) / widget.ratio;
-          // TODO: notify sms that it has a new value.
+          Provider.of<Data>(context).setDoubleValue(newDouble);
         } catch (e) {
           //just ignore
         }
