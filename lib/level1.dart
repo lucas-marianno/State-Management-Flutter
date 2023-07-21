@@ -9,7 +9,7 @@ class Level1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('$Level1');
+    print('$Level1 was rebuilt');
     return const Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider_test/level1.dart';
-import 'package:provider_test/singletonclass.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,19 +13,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  MySingleton singleton = MySingleton();
-
-  @override
-  void initState() {
-    super.initState();
-    singleton.addListener(() => setState(() {}));
-  }
-
   @override
   Widget build(BuildContext context) {
-    print('$MyApp');
-    // String title = singleton.getString();
-    String title = singleton.getDouble().toStringAsFixed(2);
+    print('$MyApp was rebuilt');
+
+    //TODO: get [doubleValue] from state management solution (sms).
+    double doubleValue = 0;
+    String title = doubleValue.toStringAsFixed(2);
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(

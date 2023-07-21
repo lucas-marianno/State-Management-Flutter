@@ -8,7 +8,7 @@ class Level2a extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('$Level2a');
+    print('$Level2a was rebuilt');
     return Expanded(
       child: Container(
         color: Colors.green,
@@ -28,7 +28,7 @@ class Level2b extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('$Level2b');
+    print('$Level2b was rebuilt');
     return Expanded(
       child: Container(
         color: Colors.lightBlueAccent,

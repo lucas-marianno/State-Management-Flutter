@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider_test/singletonclass.dart';
 
 class MyTextField extends StatefulWidget {
   const MyTextField(
@@ -17,14 +16,17 @@ class MyTextField extends StatefulWidget {
 class _MyTextFieldState extends State<MyTextField> {
   TextEditingController controller = TextEditingController();
   FocusNode focus = FocusNode();
-  MySingleton singleton = MySingleton();
 
   @override
   Widget build(BuildContext context) {
-    double doubleValue = singleton.getDouble() * widget.ratio;
+    print('$MyTextField was rebuilt');
+
+    //TODO: get [doubleValue] from state management solution (sms).
+    double doubleValue = 0;
+    doubleValue *= widget.ratio;
 
     if (!focus.hasFocus) controller.clear();
-    singleton.addListener(() => setState(() {}));
+    // TODO: rebuild widget everytime doubleValue has a new value from sms.
 
     return TextField(
       focusNode: focus,
@@ -34,7 +36,8 @@ class _MyTextFieldState extends State<MyTextField> {
       textAlign: TextAlign.center,
       onChanged: (value) {
         try {
-          singleton.setDouble(double.parse(value) / widget.ratio);
+          final newDouble = double.parse(value) / widget.ratio;
+          // TODO: notify sms that it has a new value.
         } catch (e) {
           //just ignore
         }
