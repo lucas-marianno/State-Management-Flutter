@@ -11,7 +11,7 @@ class Level3a extends StatelessWidget {
     print('$Level3a was rebuilt');
     return Container(
       color: Colors.white,
-      child: const Center(
+      child: Center(
         child: MyTextField(1),
       ),
     );
@@ -28,7 +28,7 @@ class Level3b extends StatelessWidget {
     print('$Level3b was rebuilt');
     return Container(
       color: Colors.white,
-      child: const Center(
+      child: Center(
         child: MyTextField(4.82),
       ),
     );

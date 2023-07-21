@@ -7,14 +7,9 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     print('$MyApp was rebuilt');
@@ -41,8 +36,10 @@ class MyAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('$MyAppBar was rebuilt');
     //TODO: get [doubleValue] from state management solution (sms).
     double doubleValue = Provider.of<Data>(context).doubleValue;
+
     String title = doubleValue.toStringAsFixed(2);
     return AppBar(
       title: Text(title),

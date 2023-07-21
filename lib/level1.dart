@@ -10,12 +10,12 @@ class Level1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('$Level1 was rebuilt');
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Level2a(),
+        const Level2a(),
         Expanded(child: Center(child: MyTextField(2))),
-        Level2b(),
+        const Level2b(),
       ],
     );
   }
