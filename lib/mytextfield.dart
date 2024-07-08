@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider_test/bloc/value_bloc.dart';
 
-class MyTextField extends StatefulWidget {
+class MyTextField extends StatelessWidget {
   const MyTextField(
     this.ratio, {
     super.key,
@@ -10,50 +12,67 @@ class MyTextField extends StatefulWidget {
   final double ratio;
 
   @override
-  State<MyTextField> createState() => _MyTextFieldState();
-}
-
-class _MyTextFieldState extends State<MyTextField> {
-  TextEditingController controller = TextEditingController();
-  FocusNode focus = FocusNode();
-
-  @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+    FocusNode focus = FocusNode();
     print('$MyTextField was rebuilt');
 
-    //TODO: get [doubleValue] from state management solution (sms).
-    double doubleValue = 0;
-    doubleValue *= widget.ratio;
-
-    if (!focus.hasFocus) controller.clear();
-    // TODO: rebuild widget everytime doubleValue has a new value from sms.
-
-    return TextField(
-      focusNode: focus,
-      controller: controller,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(hintText: doubleValue.toStringAsFixed(2)),
-      textAlign: TextAlign.center,
-      onChanged: (value) {
-        try {
-          final newDouble = double.parse(value) / widget.ratio;
-          // TODO: notify sms that it has a new value.
-        } catch (e) {
-          //just ignore
+    return BlocBuilder<ValueBloc, ValueState>(
+      builder: (context, state) {
+        if (state is ValueInitialState) {
+          return const CircularProgressIndicator();
         }
-      },
-      onTap: () {
-        if (!focus.hasFocus) {
-          controller.text = doubleValue.toStringAsFixed(2);
-          controller.selection = TextSelection(
-            baseOffset: 0,
-            extentOffset: controller.text.length,
+        if (state is ValueLoadedState) {
+          // Clears text if has new value and it's not on focus
+          if (!focus.hasFocus) controller.clear();
+
+          // Get [doubleValue] from state management solution (sms).
+          double doubleValue = state.value;
+          doubleValue *= ratio;
+
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+              onTapOutside: (event) {
+                focus.unfocus();
+                controller.clear();
+              },
+              focusNode: focus,
+              controller: controller,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: doubleValue.toStringAsFixed(2),
+                helperText: 'ratio multiplier: $ratio',
+              ),
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                value = value == '' ? '0' : value;
+
+                double newDouble = double.tryParse(value) ?? 0;
+
+                newDouble = newDouble / ratio;
+
+                // Notify sms that it has a new value.
+                context.read<ValueBloc>().add(SetValueEvent(newDouble));
+              },
+              onTap: () {
+                if (!focus.hasFocus) {
+                  controller.text = doubleValue.toStringAsFixed(2);
+                  controller.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: controller.text.length,
+                  );
+                }
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'\d+\.?\d*')),
+              ],
+            ),
           );
+        } else {
+          return const Center(child: Text('nem sei, mor fita'));
         }
       },
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'\d|\.')),
-      ],
     );
   }
 }
